@@ -7,6 +7,7 @@ Created on Wed Feb  4 08:25:12 2026
 """
 from pesummary.gw.fetch import fetch_open_samples, fetch_open_strain
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Next we generate the plus and cross polarizations in the time domain for the
 # maximum likelihood sample
@@ -18,13 +19,14 @@ approximant = "SEOBNRv4PHM"
 probe = 'GW250114_082203-v1'
 # probe = 'GW170817-v3'
 # # First we download and read the publically available posterior samples
-f = fetch_open_samples(probe)
-f_samples = f.samples_dict
-EOB2 = f_samples
-ht2 = EOB2.maxL_td_waveform(approximant, delta_t, f_low, f_ref=f_low, project="H1")
+# f = fetch_open_samples(probe)
+# f_samples = f.samples_dict
+# EOB2 = f_samples
+# # !!!fix function maxL_td_waveform not found error!!!!
+# ht2 = EOB2.maxL_td_waveform(approximant, delta_t, f_low, f_ref=f_low, project="H1")
 
-fig = plt.figure()
-plt.plot(ht2.times, ht2)
+# fig = plt.figure()
+# plt.plot(ht2.times, ht2)
 
 
 
@@ -35,12 +37,15 @@ EOB = samples["C01:SEOBNRv4PHM"]
 approximant = "SEOBNRv4PHM"
 
 
-ht = EOB.maxL_td_waveform(approximant, delta_t, f_low, f_ref=f_low, project="L1")
+ht = EOB.maxL_td_waveform(approximant, delta_t, f_low, f_ref=f_low, project="H1")
 
-
+print(samples)
+    
 fig = plt.figure()
 plt.plot(ht.times, ht)
 
+np_ht = np.asarray(ht)
+np.save('GW150914_waveform.npy', [ht.times, np_ht])
 
 # TEST this later => unpack error?
 # path_to_directory = fetch_open_samples(
